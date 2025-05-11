@@ -1,24 +1,14 @@
-import "./style.css";
+const ROOT_ID = "tabpet-root";
+const PET_CLASS = "tabpet-pet";
+const SPEECH_CLASS = "tabpet-speech";
 
-type PetMood = "idle" | "walk" | "sleep" | "happy";
-
-type TabPetSettings = {
-  enabled: boolean;
-  petName: string;
-  speechEnabled: boolean;
-};
-
-const defaultSettings: TabPetSettings = {
+const defaultSettings = {
   enabled: true,
   petName: "TabPet",
   speechEnabled: true
 };
 
-const ROOT_ID = "tabpet-root";
-const PET_CLASS = "tabpet-pet";
-const SPEECH_CLASS = "tabpet-speech";
-
-const moods: PetMood[] = ["idle", "walk", "sleep", "happy"];
+const moods = ["idle", "walk", "sleep", "happy"];
 const lines = [
   "Just vibing on this tab.",
   "You scroll, I supervise.",
@@ -26,15 +16,13 @@ const lines = [
   "Pet me for morale."
 ];
 
-function randomItem<T>(items: T[]): T {
+function randomItem(items) {
   return items[Math.floor(Math.random() * items.length)];
 }
 
-function ensureRoot(): HTMLDivElement {
+function ensureRoot() {
   const existing = document.getElementById(ROOT_ID);
-  if (existing) {
-    return existing as HTMLDivElement;
-  }
+  if (existing) return existing;
 
   const root = document.createElement("div");
   root.id = ROOT_ID;
@@ -48,12 +36,12 @@ function ensureRoot(): HTMLDivElement {
   return root;
 }
 
-function setMood(pet: HTMLElement, mood: PetMood) {
+function setMood(pet, mood) {
   pet.setAttribute("data-mood", mood);
 }
 
-function speak(root: HTMLElement, text: string) {
-  const bubble = root.querySelector(`.${SPEECH_CLASS}`) as HTMLDivElement | null;
+function speak(root, text) {
+  const bubble = root.querySelector(`.${SPEECH_CLASS}`);
   if (!bubble) return;
   bubble.textContent = text;
   bubble.hidden = false;
@@ -62,20 +50,20 @@ function speak(root: HTMLElement, text: string) {
   }, 2200);
 }
 
-async function getContentSettings(): Promise<TabPetSettings> {
+async function getSettings() {
   const result = await chrome.storage.local.get("tabpet:settings");
   return {
     ...defaultSettings,
-    ...(result["tabpet:settings"] as Partial<TabPetSettings> | undefined)
+    ...(result["tabpet:settings"] || {})
   };
 }
 
 async function mountPet() {
-  const settings = await getContentSettings();
+  const settings = await getSettings();
   if (!settings.enabled) return;
 
   const root = ensureRoot();
-  const pet = root.querySelector(`.${PET_CLASS}`) as HTMLButtonElement | null;
+  const pet = root.querySelector(`.${PET_CLASS}`);
   if (!pet) return;
 
   pet.title = settings.petName;
