@@ -55,6 +55,10 @@ h1 {
   background: #fffdfa;
 }
 
+.field input[type="range"] {
+  width: 100%;
+}
+
 .checkbox {
   grid-template-columns: auto 1fr;
   align-items: center;

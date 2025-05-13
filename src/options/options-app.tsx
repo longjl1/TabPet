@@ -34,6 +34,45 @@ export function OptionsApp() {
           />
         </label>
 
+        <label className="field">
+          <span>Custom asset URL</span>
+          <input
+            value={settings.customAssetUrl}
+            placeholder="https://example.com/pet.png"
+            onChange={(event) =>
+              setSettings({ ...settings, customAssetUrl: event.target.value })
+            }
+          />
+        </label>
+
+        <label className="field">
+          <span>Pet scale</span>
+          <input
+            type="range"
+            min="0.7"
+            max="1.8"
+            step="0.1"
+            value={settings.petScale}
+            onChange={(event) =>
+              setSettings({ ...settings, petScale: Number(event.target.value) })
+            }
+          />
+        </label>
+
+        <label className="field">
+          <span>Roam speed</span>
+          <input
+            type="range"
+            min="0.5"
+            max="1.8"
+            step="0.1"
+            value={settings.roamSpeed}
+            onChange={(event) =>
+              setSettings({ ...settings, roamSpeed: Number(event.target.value) })
+            }
+          />
+        </label>
+
         <label className="field checkbox">
           <input
             type="checkbox"
