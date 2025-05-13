@@ -3,7 +3,10 @@ chrome.runtime.onInstalled.addListener(async () => {
     "tabpet:settings": {
       enabled: true,
       petName: "TabPet",
-      speechEnabled: true
+      speechEnabled: true,
+      customAssetUrl: "",
+      petScale: 1,
+      roamSpeed: 1
     }
   });
 });
