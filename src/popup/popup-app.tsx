@@ -45,6 +45,19 @@ export function App() {
             }
           />
         </label>
+        <label className="row">
+          <span>Roam speed</span>
+          <input
+            type="range"
+            min="0.5"
+            max="1.8"
+            step="0.1"
+            value={settings.roamSpeed}
+            onChange={(event) =>
+              void update({ ...settings, roamSpeed: Number(event.target.value) })
+            }
+          />
+        </label>
         <a className="link" href="options.html" target="_blank" rel="noreferrer">
           Open full settings
         </a>
