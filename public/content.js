@@ -7,7 +7,10 @@ const STORAGE_KEY = "tabpet:pet-state";
 const defaultSettings = {
   enabled: true,
   petName: "TabPet",
-  speechEnabled: true
+  speechEnabled: true,
+  customAssetUrl: "",
+  petScale: 1,
+  roamSpeed: 1
 };
 
 const defaultPetState = {
@@ -15,36 +18,44 @@ const defaultPetState = {
   energy: 68,
   joy: 80,
   mood: "idle",
-  position: 0.18,
+  x: 180,
+  y: 140,
+  vx: 1,
   facing: 1,
-  sleeping: false
+  sleeping: false,
+  dragged: false
 };
 
 const speechLines = {
   idle: [
-    "I am on quality-control duty.",
-    "This tab feels cozy.",
-    "A tiny walk solves many problems."
+    "I am quietly supervising this page.",
+    "This corner of the internet seems acceptable.",
+    "Just a tiny patrol before my next nap."
   ],
   walk: [
-    "Patrolling the page perimeter.",
-    "Stretching my little tab legs.",
-    "Every scroll deserves supervision."
+    "Cross-tab patrol in progress.",
+    "Stretching my little browser legs.",
+    "I am mapping the page terrain."
   ],
   sleep: [
-    "Tiny nap in progress...",
-    "Dreaming about clean CSS.",
-    "Wake me for snacks."
+    "Power-saving mode engaged.",
+    "Dreaming in CSS gradients.",
+    "Wake me only for premium snacks."
   ],
   feed: [
-    "Crunch crunch. Excellent snack.",
-    "That was premium kibble.",
-    "Morale and calories restored."
+    "Snack accepted with gratitude.",
+    "Tiny stomach, huge morale boost.",
+    "Excellent. I can keep patrolling."
   ],
   play: [
-    "Best click of the day.",
-    "Zoomies unlocked.",
-    "I feel dramatically more heroic."
+    "That was delightfully chaotic.",
+    "Zoomies initiated.",
+    "I feel dramatically more alive."
+  ],
+  drag: [
+    "Careful, I am portable but proud.",
+    "New spot acquired.",
+    "Strategic repositioning approved."
   ]
 };
 
@@ -63,7 +74,7 @@ function ensureRoot() {
   const root = document.createElement("div");
   root.id = ROOT_ID;
   root.innerHTML = `
-    <div class="tabpet-panel">
+    <div class="tabpet-hud">
       <div class="tabpet-header">
         <div>
           <p class="tabpet-eyebrow">Browser Pet</p>
@@ -85,12 +96,6 @@ function ensureRoot() {
           <div class="tabpet-bar"><div data-bar="joy"></div></div>
         </div>
       </div>
-      <div class="tabpet-stage">
-        <div class="tabpet-track"></div>
-        <button class="${PET_CLASS}" type="button" aria-label="TabPet">
-          <span class="tabpet-face">^.^</span>
-        </button>
-      </div>
       <div class="tabpet-actions">
         <button type="button" data-action="feed">Feed</button>
         <button type="button" data-action="sleep">Nap</button>
@@ -98,6 +103,9 @@ function ensureRoot() {
       </div>
       <div class="${SPEECH_CLASS}" hidden></div>
     </div>
+    <button class="${PET_CLASS}" type="button" aria-label="TabPet">
+      <span class="tabpet-face" data-face>^.^</span>
+    </button>
   `;
   document.body.appendChild(root);
   return root;
@@ -105,10 +113,6 @@ function ensureRoot() {
 
 function setMood(pet, mood) {
   pet.setAttribute("data-mood", mood);
-}
-
-function setFacing(pet, facing) {
-  pet.style.setProperty("--tabpet-facing", String(facing));
 }
 
 function speak(root, text) {
@@ -144,9 +148,9 @@ async function savePetState(state) {
 }
 
 function deriveMood(state) {
-  if (state.sleeping || state.energy < 22) return "sleep";
-  if (state.joy > 78 && state.hunger > 40) return "happy";
-  if (state.hunger < 30) return "idle";
+  if (state.sleeping || state.energy < 18) return "sleep";
+  if (state.joy > 82 && state.hunger > 42) return "happy";
+  if (state.dragged) return "happy";
   return "walk";
 }
 
@@ -159,66 +163,100 @@ function updateBars(root, state) {
   });
 }
 
-function updateMeta(root, pet, settings, state) {
+function applyAsset(face, pet, settings) {
+  if (settings.customAssetUrl) {
+    pet.style.setProperty("--tabpet-asset-url", `url("${settings.customAssetUrl}")`);
+    pet.setAttribute("data-render-mode", "image");
+    face.hidden = true;
+  } else {
+    pet.style.removeProperty("--tabpet-asset-url");
+    pet.setAttribute("data-render-mode", "face");
+    face.hidden = false;
+  }
+}
+
+function getViewportBounds() {
+  return {
+    width: window.innerWidth,
+    height: window.innerHeight
+  };
+}
+
+function updateMeta(root, pet, face, settings, state) {
   const title = root.querySelector(".tabpet-name");
   const chip = root.querySelector("[data-state-chip]");
+  const hud = root.querySelector(".tabpet-hud");
   if (title) title.textContent = settings.petName;
   if (chip) chip.textContent = state.sleeping ? "Sleeping" : state.mood[0].toUpperCase() + state.mood.slice(1);
 
+  applyAsset(face, pet, settings);
   setMood(pet, state.mood);
-  setFacing(pet, state.facing);
+  pet.style.setProperty("--tabpet-scale", String(settings.petScale));
+  pet.style.setProperty("--tabpet-facing", String(state.facing));
+
+  const petWidth = 96 * settings.petScale;
+  const petHeight = 96 * settings.petScale;
+  const x = Math.round(state.x);
+  const y = Math.round(state.y);
+  pet.style.left = `${x}px`;
+  pet.style.top = `${y}px`;
   pet.title = `${settings.petName}: hunger ${Math.round(state.hunger)}, energy ${Math.round(state.energy)}, joy ${Math.round(state.joy)}`;
 
-  const stage = root.querySelector(".tabpet-stage");
-  if (stage) {
-    const width = stage.clientWidth || 280;
-    const x = Math.round(state.position * (width - 92));
-    pet.style.transform = `translateX(${x}px) scaleX(${state.facing})`;
-    if (state.mood === "happy") {
-      pet.style.transform += " rotate(6deg) scale(1.04)";
-    }
+  if (hud) {
+    const hudX = Math.min(window.innerWidth - 248, Math.max(12, x - 78));
+    const hudY = Math.max(12, y - 166);
+    hud.style.left = `${hudX}px`;
+    hud.style.top = `${hudY}px`;
   }
 
   updateBars(root, state);
 }
 
-function createController(root, pet, settings, initialState) {
+function createController(root, pet, face, settings, initialState) {
   let state = { ...initialState };
   let syncCounter = 0;
+  let dragOffsetX = 0;
+  let dragOffsetY = 0;
+  let dragging = false;
 
   function sync() {
-    updateMeta(root, pet, settings, state);
+    updateMeta(root, pet, face, settings, state);
     syncCounter += 1;
-    if (syncCounter % 3 === 0) {
+    if (syncCounter % 2 === 0) {
       void savePetState(state);
     }
   }
 
   function setState(partial) {
-    state = {
+    const next = {
       ...state,
       ...partial
     };
-    state.hunger = clamp(state.hunger);
-    state.energy = clamp(state.energy);
-    state.joy = clamp(state.joy);
-    state.position = Math.min(0.92, Math.max(0.02, state.position));
-    state.mood = deriveMood(state);
+    const { width, height } = getViewportBounds();
+    const petWidth = 96 * settings.petScale;
+    const petHeight = 96 * settings.petScale;
+    next.hunger = clamp(next.hunger);
+    next.energy = clamp(next.energy);
+    next.joy = clamp(next.joy);
+    next.x = Math.min(width - petWidth - 8, Math.max(8, next.x));
+    next.y = Math.min(height - petHeight - 8, Math.max(8, next.y));
+    next.mood = deriveMood(next);
+    state = next;
     sync();
   }
 
-  function react(lineGroup) {
+  function react(group) {
     if (settings.speechEnabled) {
-      speak(root, randomItem(speechLines[lineGroup]));
+      speak(root, randomItem(speechLines[group]));
     }
   }
 
   function feed() {
     setState({
-      hunger: state.hunger + 24,
+      hunger: state.hunger + 26,
       joy: state.joy + 8,
       sleeping: false,
-      mood: "happy"
+      dragged: false
     });
     react("feed");
   }
@@ -227,25 +265,60 @@ function createController(root, pet, settings, initialState) {
     const nextSleeping = !state.sleeping;
     setState({
       sleeping: nextSleeping,
-      mood: nextSleeping ? "sleep" : "idle"
+      dragged: false
     });
     react(nextSleeping ? "sleep" : "idle");
   }
 
   function play() {
     setState({
-      joy: state.joy + 16,
-      energy: state.energy - 10,
-      hunger: state.hunger - 8,
+      joy: state.joy + 15,
+      energy: state.energy - 12,
+      hunger: state.hunger - 7,
       sleeping: false,
-      mood: "happy"
+      dragged: false
     });
     react("play");
   }
 
+  function beginDrag(event) {
+    const rect = pet.getBoundingClientRect();
+    dragOffsetX = event.clientX - rect.left;
+    dragOffsetY = event.clientY - rect.top;
+    dragging = true;
+    pet.setPointerCapture(event.pointerId);
+    setState({
+      sleeping: false,
+      dragged: true
+    });
+    react("drag");
+  }
+
+  function moveDrag(event) {
+    if (!dragging) return;
+    setState({
+      x: event.clientX - dragOffsetX,
+      y: event.clientY - dragOffsetY
+    });
+  }
+
+  function endDrag(event) {
+    if (!dragging) return;
+    dragging = false;
+    pet.releasePointerCapture(event.pointerId);
+    window.setTimeout(() => {
+      setState({ dragged: false });
+    }, 900);
+  }
+
   pet.addEventListener("click", () => {
-    play();
+    if (!dragging) play();
   });
+
+  pet.addEventListener("pointerdown", beginDrag);
+  pet.addEventListener("pointermove", moveDrag);
+  pet.addEventListener("pointerup", endDrag);
+  pet.addEventListener("pointercancel", endDrag);
 
   root.querySelectorAll("[data-action]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -256,26 +329,41 @@ function createController(root, pet, settings, initialState) {
     });
   });
 
-  window.setInterval(() => {
-    const decay = state.sleeping
-      ? { hunger: -2, energy: +5, joy: -1 }
-      : { hunger: -3, energy: state.mood === "walk" ? -2 : -1, joy: -1.2 };
+  window.addEventListener("resize", () => {
+    setState({});
+  });
 
-    let nextPosition = state.position;
+  window.setInterval(() => {
+    const speed = 7 * settings.roamSpeed;
+    const decay = state.sleeping
+      ? { hunger: -1.8, energy: +4.5, joy: -0.6 }
+      : { hunger: -2.8, energy: state.mood === "walk" ? -1.6 : -0.8, joy: -0.9 };
+
+    let nextX = state.x;
+    let nextY = state.y;
     let nextFacing = state.facing;
     let nextSleeping = state.sleeping;
 
-    if (!nextSleeping && state.energy > 18) {
-      nextPosition += 0.06 * nextFacing;
-      if (nextPosition >= 0.92 || nextPosition <= 0.02) {
-        nextFacing *= -1;
-        nextPosition = Math.min(0.92, Math.max(0.02, nextPosition));
+    if (!dragging && !nextSleeping && state.energy > 16) {
+      nextX += speed * nextFacing;
+      if (Math.random() < 0.28) {
+        nextY += (Math.random() - 0.5) * 22;
       }
     }
 
+    const { width, height } = getViewportBounds();
+    const petWidth = 96 * settings.petScale;
+    const petHeight = 96 * settings.petScale;
+
+    if (nextX <= 8 || nextX >= width - petWidth - 8) {
+      nextFacing *= -1;
+      nextX = Math.min(width - petWidth - 8, Math.max(8, nextX));
+    }
+    nextY = Math.min(height - petHeight - 8, Math.max(8, nextY));
+
     if (state.energy < 12) {
       nextSleeping = true;
-    } else if (state.sleeping && state.energy > 76 && state.hunger > 28) {
+    } else if (state.sleeping && state.energy > 80 && state.hunger > 26) {
       nextSleeping = false;
     }
 
@@ -283,11 +371,12 @@ function createController(root, pet, settings, initialState) {
       hunger: state.hunger + decay.hunger,
       energy: state.energy + decay.energy,
       joy: state.joy + decay.joy,
-      position: nextPosition,
+      x: nextX,
+      y: nextY,
       facing: nextFacing,
       sleeping: nextSleeping
     });
-  }, 3200);
+  }, 2500);
 
   sync();
 }
@@ -298,12 +387,13 @@ async function mountPet() {
 
   const root = ensureRoot();
   const pet = root.querySelector(`.${PET_CLASS}`);
-  if (!pet) return;
+  const face = root.querySelector("[data-face]");
+  if (!pet || !face) return;
 
   const petState = await getPetState();
-  createController(root, pet, settings, petState);
+  createController(root, pet, face, settings, petState);
   if (settings.speechEnabled) {
-    speak(root, `${settings.petName} is on page patrol.`);
+    speak(root, `${settings.petName} is roaming freely across this page.`);
   }
 }
 
