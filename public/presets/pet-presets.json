@@ -1,0 +1,19 @@
+{
+  "presets": [
+    {
+      "id": "tabpet-face",
+      "label": "Default Face",
+      "assetUrl": ""
+    },
+    {
+      "id": "amber-orb",
+      "label": "Amber Orb",
+      "assetUrl": "presets/amber-orb.svg"
+    },
+    {
+      "id": "mint-blob",
+      "label": "Mint Blob",
+      "assetUrl": "presets/mint-blob.svg"
+    }
+  ]
+}
