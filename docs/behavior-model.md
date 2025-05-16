@@ -1,0 +1,28 @@
+# Behavior Model Notes
+
+The pet behavior is intentionally lightweight and readable.
+
+## Working Variables
+
+- `hunger`
+- `energy`
+- `joy`
+- `mood`
+- `x, y`
+- `facing`
+- `sleeping`
+
+## Current Rules
+
+- hunger slowly decays over time
+- energy decays while roaming and recovers during sleep
+- joy decays slowly but increases when the user interacts
+- the pet automatically sleeps when energy becomes too low
+- the pet changes direction when it hits the viewport boundary
+
+## Future Ideas
+
+- context-sensitive reactions to scrolling
+- curiosity behavior around links and images
+- idle animations with richer timing
+- mood changes based on time of day
