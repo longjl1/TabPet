@@ -19,3 +19,5 @@ TabPet is intended to feel less like a floating widget and more like a tiny crea
 3. Replaceable art assets
 4. Better animations and effects
 5. Saved long-term pet progression
+
+- [2025-05-20] updated a milestone note for drag polish, full-screen patrol behavior, and future asset presets.
