@@ -8,3 +8,5 @@ The main UI challenge is balancing visibility with non-intrusiveness.
 - the HUD should follow the pet without covering too much content
 - interaction buttons should feel lightweight and playful
 - visuals should remain readable on a wide range of websites
+
+- [2025-05-20] added a small note about how the floating HUD should stay legible while following the pet around the viewport.
