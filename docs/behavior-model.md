@@ -26,3 +26,5 @@ The pet behavior is intentionally lightweight and readable.
 - curiosity behavior around links and images
 - idle animations with richer timing
 - mood changes based on time of day
+
+- [2025-05-20] wrote down a small heuristic for state decay, patrol cadence, and when the pet should settle into a nap.
