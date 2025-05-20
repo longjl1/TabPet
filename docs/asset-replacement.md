@@ -21,3 +21,5 @@ The pet can render in two modes:
 - local file upload support
 - sprite-sheet frame selection
 - separate art for idle, walk, sleep, and happy states
+
+- [2025-05-20] added another reminder about transparent PNGs, sprite proportions, and swapping in custom art later.
