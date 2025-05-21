@@ -5,3 +5,5 @@
 - [ ] Verify popup settings update stored values
 - [ ] Verify custom asset URLs render correctly
 - [ ] Verify sleep, feed, and play interactions update the HUD
+
+- [2025-05-21] added another manual check for pointer interactions, movement transitions, and full-page placement.
