@@ -23,3 +23,5 @@ The pet can render in two modes:
 - separate art for idle, walk, sleep, and happy states
 
 - [2025-05-20] added another reminder about transparent PNGs, sprite proportions, and swapping in custom art later.
+
+- [2025-05-23] added another reminder about transparent PNGs, sprite proportions, and swapping in custom art later.
