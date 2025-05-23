@@ -28,3 +28,5 @@ The pet behavior is intentionally lightweight and readable.
 - mood changes based on time of day
 
 - [2025-05-20] wrote down a small heuristic for state decay, patrol cadence, and when the pet should settle into a nap.
+
+- [2025-05-23] wrote down a small heuristic for state decay, patrol cadence, and when the pet should settle into a nap.
