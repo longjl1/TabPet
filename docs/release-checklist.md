@@ -7,3 +7,5 @@
 - [ ] Verify sleep, feed, and play interactions update the HUD
 
 - [2025-05-21] added another manual check for pointer interactions, movement transitions, and full-page placement.
+
+- [2025-05-25] added another manual check for pointer interactions, movement transitions, and full-page placement.
