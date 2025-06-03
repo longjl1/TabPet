@@ -13,3 +13,5 @@
 - [2025-05-27] added another manual check for pointer interactions, movement transitions, and full-page placement.
 
 - [2025-05-30] added another manual check for pointer interactions, movement transitions, and full-page placement.
+
+- [2025-06-03] added another manual check for pointer interactions, movement transitions, and full-page placement.
