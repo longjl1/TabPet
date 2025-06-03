@@ -45,3 +45,5 @@ Then load the generated `dist/` folder as an unpacked extension in Chrome.
 - [2025-05-28] noted another setup tip for building, loading, and testing the roaming version of TabPet in Chrome.
 
 - [2025-05-30] noted another setup tip for building, loading, and testing the roaming version of TabPet in Chrome.
+
+- [2025-06-03] noted another setup tip for building, loading, and testing the roaming version of TabPet in Chrome.
