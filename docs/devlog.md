@@ -17,3 +17,5 @@ This file tracks high-level development notes for the roaming pet version of Tab
 - [2025-05-28] captured another note about viewport roaming, drag behavior, and keeping the pet readable while it moves.
 
 - [2025-05-31] captured another note about viewport roaming, drag behavior, and keeping the pet readable while it moves.
+
+- [2025-06-04] captured another note about viewport roaming, drag behavior, and keeping the pet readable while it moves.
