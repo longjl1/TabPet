@@ -20,3 +20,5 @@ The main UI challenge is balancing visibility with non-intrusiveness.
 - [2025-06-01] added a small note about how the floating HUD should stay legible while following the pet around the viewport.
 
 - [2025-06-04] added a small note about how the floating HUD should stay legible while following the pet around the viewport.
+
+- [2025-06-06] added a small note about how the floating HUD should stay legible while following the pet around the viewport.
