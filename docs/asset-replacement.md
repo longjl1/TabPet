@@ -33,3 +33,5 @@ The pet can render in two modes:
 - [2025-06-01] added another reminder about transparent PNGs, sprite proportions, and swapping in custom art later.
 
 - [2025-06-04] added another reminder about transparent PNGs, sprite proportions, and swapping in custom art later.
+
+- [2025-06-07] added another reminder about transparent PNGs, sprite proportions, and swapping in custom art later.
