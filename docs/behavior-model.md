@@ -42,3 +42,5 @@ The pet behavior is intentionally lightweight and readable.
 - [2025-06-06] wrote down a small heuristic for state decay, patrol cadence, and when the pet should settle into a nap.
 
 - [2025-06-10] wrote down a small heuristic for state decay, patrol cadence, and when the pet should settle into a nap.
+
+- [2025-06-10] wrote down a small heuristic for state decay, patrol cadence, and when the pet should settle into a nap.
