@@ -35,3 +35,5 @@ TabPet is intended to feel less like a floating widget and more like a tiny crea
 - [2025-06-08] updated a milestone note for drag polish, full-screen patrol behavior, and future asset presets.
 
 - [2025-06-10] updated a milestone note for drag polish, full-screen patrol behavior, and future asset presets.
+
+- [2025-06-12] updated a milestone note for drag polish, full-screen patrol behavior, and future asset presets.
