@@ -74,13 +74,18 @@ function ensureRoot() {
   const root = document.createElement("div");
   root.id = ROOT_ID;
   root.innerHTML = `
-    <div class="tabpet-hud">
+    <div class="tabpet-hud" data-panel-open="false" aria-hidden="true">
       <div class="tabpet-header">
         <div>
           <p class="tabpet-eyebrow">Browser Pet</p>
           <h2 class="tabpet-name">TabPet</h2>
         </div>
-        <span class="tabpet-state-chip" data-state-chip>Idle</span>
+        <div class="tabpet-header-controls">
+          <span class="tabpet-state-chip" data-state-chip>Idle</span>
+          <button type="button" class="tabpet-panel-close" data-action="toggle-panel" aria-label="Hide TabPet panel">
+            Hide
+          </button>
+        </div>
       </div>
       <div class="tabpet-status">
         <div class="tabpet-stat">
@@ -204,7 +209,7 @@ function updateMeta(root, pet, face, settings, state) {
 
   if (hud) {
     const hudX = Math.min(window.innerWidth - 248, Math.max(12, x - 78));
-    const hudY = Math.max(12, y - 166);
+    const hudY = Math.min(window.innerHeight - 210, Math.max(12, y - 168));
     hud.style.left = `${hudX}px`;
     hud.style.top = `${hudY}px`;
   }
@@ -218,6 +223,16 @@ function createController(root, pet, face, settings, initialState) {
   let dragOffsetX = 0;
   let dragOffsetY = 0;
   let dragging = false;
+  let panelOpen = false;
+  let clickSuppressUntil = 0;
+  const hud = root.querySelector(".tabpet-hud");
+
+  function setPanelOpen(nextPanelOpen) {
+    panelOpen = nextPanelOpen;
+    if (!hud) return;
+    hud.setAttribute("data-panel-open", String(nextPanelOpen));
+    hud.setAttribute("aria-hidden", String(!nextPanelOpen));
+  }
 
   function sync() {
     updateMeta(root, pet, face, settings, state);
@@ -291,6 +306,7 @@ function createController(root, pet, face, settings, initialState) {
       sleeping: false,
       dragged: true
     });
+    setPanelOpen(false);
     react("drag");
   }
 
@@ -306,13 +322,25 @@ function createController(root, pet, face, settings, initialState) {
     if (!dragging) return;
     dragging = false;
     pet.releasePointerCapture(event.pointerId);
+    clickSuppressUntil = Date.now() + 220;
     window.setTimeout(() => {
       setState({ dragged: false });
     }, 900);
   }
 
   pet.addEventListener("click", () => {
-    if (!dragging) play();
+    if (!dragging && Date.now() >= clickSuppressUntil) play();
+  });
+
+  pet.addEventListener("dblclick", (event) => {
+    event.preventDefault();
+    if (!dragging) {
+      const nextPanelOpen = !panelOpen;
+      setPanelOpen(nextPanelOpen);
+      if (nextPanelOpen) {
+        react("idle");
+      }
+    }
   });
 
   pet.addEventListener("pointerdown", beginDrag);
@@ -326,6 +354,7 @@ function createController(root, pet, face, settings, initialState) {
       if (action === "feed") feed();
       if (action === "sleep") nap();
       if (action === "play") play();
+      if (action === "toggle-panel") setPanelOpen(false);
     });
   });
 
@@ -378,6 +407,7 @@ function createController(root, pet, face, settings, initialState) {
     });
   }, 2500);
 
+  setPanelOpen(false);
   sync();
 }
 
