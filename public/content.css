@@ -21,6 +21,21 @@
   box-shadow: 0 16px 34px rgba(48, 32, 17, 0.14);
   backdrop-filter: blur(6px);
   pointer-events: auto;
+  opacity: 0;
+  transform: translateY(12px) scale(0.96);
+  transform-origin: bottom center;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.tabpet-hud[data-panel-open="true"] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.tabpet-hud[data-panel-open="false"] {
+  pointer-events: none;
 }
 
 .tabpet-header {
@@ -28,6 +43,12 @@
   align-items: start;
   justify-content: space-between;
   gap: 10px;
+}
+
+.tabpet-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .tabpet-eyebrow {
@@ -51,6 +72,17 @@
   color: #6b523f;
   font-size: 11px;
   font-weight: 700;
+}
+
+.tabpet-panel-close {
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.82);
+  color: #7a5d43;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .tabpet-status {
@@ -123,6 +155,7 @@
   color: #3f3124;
   font-size: 13px;
   line-height: 1.35;
+  pointer-events: none;
 }
 
 .tabpet-pet {
@@ -145,6 +178,7 @@
     transform 220ms ease,
     box-shadow 220ms ease;
   transform: scaleX(var(--tabpet-facing));
+  user-select: none;
 }
 
 .tabpet-pet:hover {
