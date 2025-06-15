@@ -8,6 +8,7 @@ It injects a browser pet into web pages, provides a popup for quick controls, an
 
 - full-screen roaming pet behavior
 - draggable placement anywhere in the viewport
+- a collapsible control panel so the page can show only the pet by default
 - hunger, energy, and joy status bars
 - feed, sleep, and play interactions
 - configurable pet name, speed, scale, and custom asset URL
@@ -28,6 +29,13 @@ The pet is being prepared for user-supplied visuals. The intended workflow is:
 1. open the options page
 2. paste a custom image URL
 3. let the existing pet behavior system render that asset in place of the default face
+
+## Current Page Interaction
+
+- the pet roams across the visible page area on its own
+- drag the pet anywhere in the viewport to reposition it
+- double-click the pet to open the control panel
+- use the `Hide` button to collapse the panel again
 
 ## Development
 
