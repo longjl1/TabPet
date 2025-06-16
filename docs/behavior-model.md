@@ -46,3 +46,5 @@ The pet behavior is intentionally lightweight and readable.
 - [2025-06-10] wrote down a small heuristic for state decay, patrol cadence, and when the pet should settle into a nap.
 
 - [2025-06-12] wrote down a small heuristic for state decay, patrol cadence, and when the pet should settle into a nap.
+
+- [2025-06-16] dragging should temporarily suppress playful clicks so the pet does not misread repositioning as a play action.
