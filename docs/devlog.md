@@ -27,3 +27,5 @@ This file tracks high-level development notes for the roaming pet version of Tab
 - [2025-06-10] captured another note about viewport roaming, drag behavior, and keeping the pet readable while it moves.
 
 - [2025-06-12] captured another note about viewport roaming, drag behavior, and keeping the pet readable while it moves.
+
+- [2025-06-15] tested a page-first mode where only the pet stays visible until the control panel is explicitly opened.
