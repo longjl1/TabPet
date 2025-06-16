@@ -23,3 +23,5 @@
 - [2025-06-10] added another manual check for pointer interactions, movement transitions, and full-page placement.
 
 - [2025-06-12] added another manual check for pointer interactions, movement transitions, and full-page placement.
+
+- [2025-06-16] verify that double-clicking the pet reveals the panel and the Hide button collapses it again.
