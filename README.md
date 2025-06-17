@@ -63,3 +63,6 @@ Then load the generated `dist/` folder as an unpacked extension in Chrome.
 - [2025-06-10] noted another setup tip for building, loading, and testing the roaming version of TabPet in Chrome.
 
 - [2025-06-12] noted another setup tip for building, loading, and testing the roaming version of TabPet in Chrome.
+
+The current interaction model keeps the extension visually light on ordinary pages: the pet roams freely, while the controls stay tucked away until needed.
+
